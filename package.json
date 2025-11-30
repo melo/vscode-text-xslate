@@ -1,0 +1,72 @@
+{
+  "name": "text-xslate",
+  "displayName": "Text::Xslate",
+  "description": "Syntax highlighting for Text::Xslate template language (Kolon, Metakolon, TTerse)",
+  "version": "0.0.1",
+  "publisher": "your-publisher-name",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "xslate",
+    "text-xslate",
+    "kolon",
+    "template",
+    "perl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/melo/vscode-text-xslate"
+  },
+  "bugs": {
+    "url": "https://github.com/melo/vscode-text-xslate/issues"
+  },
+  "homepage": "https://github.com/melo/vscode-text-xslate#readme",
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "xslate",
+        "aliases": [
+          "Text::Xslate",
+          "Xslate",
+          "Kolon"
+        ],
+        "extensions": [
+          ".tx",
+          ".xslate"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "xslate",
+        "scopeName": "text.html.xslate",
+        "path": "./syntaxes/xslate.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.css": "css",
+          "source.js": "javascript"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.3.0"
+  }
+}
