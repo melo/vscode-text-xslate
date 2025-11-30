@@ -1,0 +1,61 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "text.html.xslate.injection",
+  "injectionSelector": "L:text.html.xslate string.quoted.double.html, L:text.html.xslate string.quoted.single.html",
+  "patterns": [
+    {
+      "include": "#xslate-in-string"
+    }
+  ],
+  "repository": {
+    "xslate-in-string": {
+      "patterns": [
+        {
+          "name": "meta.embedded.inline.xslate",
+          "begin": "(<:)(-)?",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.section.embedded.begin.xslate"
+            },
+            "2": {
+              "name": "keyword.operator.chomp.xslate"
+            }
+          },
+          "end": "(-)?(:>)",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.operator.chomp.xslate"
+            },
+            "2": {
+              "name": "punctuation.section.embedded.end.xslate"
+            }
+          },
+          "contentName": "meta.embedded.expression.xslate",
+          "patterns": [
+            {
+              "include": "text.html.xslate#xslate-expression"
+            }
+          ]
+        },
+        {
+          "name": "comment.line.xslate",
+          "match": "(<:)(#)(.*?)(:>)",
+          "captures": {
+            "1": {
+              "name": "punctuation.section.embedded.begin.xslate"
+            },
+            "2": {
+              "name": "punctuation.definition.comment.xslate"
+            },
+            "3": {
+              "name": "comment.line.content.xslate"
+            },
+            "4": {
+              "name": "punctuation.section.embedded.end.xslate"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
