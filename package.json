@@ -2,8 +2,8 @@
   "name": "text-xslate",
   "displayName": "Text::Xslate",
   "description": "Syntax highlighting for Text::Xslate template language (Kolon, Metakolon, TTerse)",
-  "version": "0.0.4",
-  "publisher": "your-publisher-name",
+  "version": "0.9.0",
+  "publisher": "melo",
   "license": "MIT",
   "icon": "images/icon.png",
   "engines": {
@@ -12,6 +12,7 @@
   "categories": [
     "Programming Languages"
   ],
+  "pricing": "Free",
   "keywords": [
     "xslate",
     "text-xslate",
@@ -57,7 +58,9 @@
       {
         "scopeName": "text.html.xslate.injection",
         "path": "./syntaxes/xslate-injection.tmLanguage.json",
-        "injectTo": ["text.html.xslate"]
+        "injectTo": [
+          "text.html.xslate"
+        ]
       }
     ]
   },
@@ -73,5 +76,8 @@
     "@types/vscode": "^1.106.1",
     "@vscode/vsce": "^3.7.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "vsce": "^2.15.0"
   }
 }
