@@ -2,7 +2,7 @@
   "name": "text-xslate",
   "displayName": "Text::Xslate",
   "description": "Syntax highlighting for Text::Xslate template language (Kolon, Metakolon, TTerse)",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "publisher": "melo",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -29,6 +29,9 @@
   },
   "homepage": "https://github.com/melo/vscode-text-xslate#readme",
   "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:xslate"
+  ],
   "contributes": {
     "languages": [
       {
