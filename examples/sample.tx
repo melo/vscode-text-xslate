@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><: $page.title | html :></title>
+</head>
+<body>
+    <:# This is a block comment :>
+
+    : # Line comment
+    : my $greeting = "Hello"
+
+    <h1><: $greeting :>, <: $user.name | html :>!</h1>
+
+    <: if $user.is_admin { :>
+        <div class="admin-panel">
+            <p>Welcome, administrator!</p>
+        </div>
+    <: } elsif $user.is_member { :>
+        <div class="member-area">
+            <p>Member since: <: $user.created_at :></p>
+        </div>
+    <: } else { :>
+        <p>Please <a href="/login">log in</a>.</p>
+    <: } :>
+
+    <: # Loop example :>
+    <ul>
+    : for $items -> $item {
+        <li>
+            <strong><: $item.name | html :></strong>
+            <span class="price">$<: $item.price :></span>
+        </li>
+    : }
+    </ul>
+
+    <: # Raw output (unescaped) :>
+    <div class="content">
+        <:= $article.html_content :>
+    </div>
+
+    <: # Filters and method calls :>
+    <p>Total: <: $cart.total() | number_format(2) :></p>
+    <p>URL: <: $page.url | uri :></p>
+
+    <: # Variables and operators :>
+    : my $count = $items.size()
+    : my $has_items = $count > 0
+    : my $message = $has_items ? "You have " ~ $count ~ " items" : "Cart is empty"
+    <p><: $message :></p>
+
+    <: # Hash and array literals :>
+    : my $config = { debug => true, max_items => 100 }
+    : my $colors = ["red", "green", "blue"]
+
+    <: # Include and cascade :>
+    <: include "partials/footer.tx" :>
+
+    <: # Block definition for template inheritance :>
+    : block content -> {
+        <p>Default content here</p>
+    : }
+
+    #*
+       Multi-line block comment
+       inside template code
+    *#
+
+</body>
+</html>
