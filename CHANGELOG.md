@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2025-11-30
+
+### Changed
+- Enhanced README.md with improved features section highlighting HTML attribute support
+- Added comprehensive examples showing Xslate expressions in HTML attributes
+- Updated installation instructions with current version number
+- Added comment syntax examples to documentation
+- Complete CHANGELOG.md with detailed version history and feature descriptions
+
 ## [0.9.0] - 2025-11-30
 
 ### Changed
