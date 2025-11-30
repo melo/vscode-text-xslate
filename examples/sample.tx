@@ -4,7 +4,7 @@
     <title><: $page.title | html :></title>
 </head>
 <body>
-    <:# This is a block comment :>
+    <:# This is a comment within tags :>
 
     : # Line comment
     : my $greeting = "Hello"
@@ -32,7 +32,7 @@
         <p>Please log in to continue.</p>
     : }
 
-    <: # Loop examples :>
+    <:# Loop examples :>
     <ul>
     : for $items -> $item {
         <li>
@@ -45,36 +45,36 @@
     : }
     </ul>
 
-    <: # Raw output (unescaped) :>
+    <:# Raw output (unescaped) :>
     <div class="content">
         <:= $article.html_content :>
     </div>
 
-    <: # Filters and method calls :>
+    <:# Filters and method calls :>
     <p>Total: <: $cart.total() | number_format(2) :></p>
     <p>URL: <: $page.url | uri :></p>
     <p><: $description | html :></p>
 
-    <: # Variables and operators :>
+    <:# Variables and operators :>
     : my $count = $items.size()
     : my $has_items = $count > 0
     : my $message = $has_items ? "You have " ~ $count ~ " items" : "Cart is empty"
     <p><: $message :></p>
     <p>Total items: <: $count :></p>
 
-    <: # Hash and array literals :>
+    <:# Hash and array literals :>
     : my $config = { debug => true, max_items => 100, version => "1.0" }
     : my $colors = ["red", "green", "blue"]
 
-    <: # Array and hash methods :>
+    <:# Array and hash methods :>
     <p>First color: <: $colors.first() :></p>
     <p>Config keys: <: $config.keys().join(", ") :></p>
 
-    <: # Special variables :>
+    <:# Special variables :>
     <p>File: <: __FILE__ :></p>
     <p>Line: <: __LINE__ :></p>
 
-    <: # Macro example :>
+    <:# Macro example :>
     : macro render_user -> $user {
         <div class="user">
             <h3><: $user.name :></h3>
@@ -82,18 +82,26 @@
         </div>
     : }
 
-    <: # Include and cascade :>
+    <:# HTML attributes with embedded expressions :>
+    <div class="user-status <: $user.is_active ? 'active' : 'inactive' :>">
+        <img src="<: $user.avatar_url :>" alt="<: $user.name | html :>'s avatar">
+        <a href="/user/<: $user.id :>" title="View <: $user.name | html :>'s profile">
+            <: $user.name | html :>
+        </a>
+        <button onclick="alert('User ID: <: $user.id :>')">Show ID</button>
+        <input type="text" value="<: $form.field_value | html :>" placeholder="Enter <: $field.label :>">
+    </div>
+
+    <:# Include and cascade :>
     <: include "partials/footer.tx" :>
 
-    <: # Block definition for template inheritance :>
+    <:# Block definition for template inheritance :>
     : block content -> {
         <p>Default content here</p>
     : }
 
-    #*
-       Multi-line block comment
-       inside template code
-    *#
+    : # Comments in Text::Xslate Kolon are line-based only
+    : # There are no multi-line block comments in Kolon syntax
 
 </body>
 </html>

@@ -2,7 +2,7 @@
   "name": "text-xslate",
   "displayName": "Text::Xslate",
   "description": "Syntax highlighting for Text::Xslate template language (Kolon, Metakolon, TTerse)",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "your-publisher-name",
   "license": "MIT",
   "icon": "images/icon.png",
