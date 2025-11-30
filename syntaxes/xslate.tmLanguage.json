@@ -2,320 +2,395 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "Text::Xslate",
   "scopeName": "text.html.xslate",
-  "injectionSelector": "L:text.html",
+  "fileTypes": ["tx", "xslate"],
   "patterns": [
-    { "include": "#xslate-comment-block" },
-    { "include": "#xslate-line-code" },
-    { "include": "#xslate-raw-output" },
-    { "include": "#xslate-tag" },
-    { "include": "text.html.basic" }
+    {
+      "include": "#xslate-tag"
+    },
+    {
+      "include": "#xslate-line-directive"
+    },
+    {
+      "include": "text.html.basic"
+    }
   ],
   "repository": {
-    "xslate-comment-block": {
-      "comment": "Multi-line comment block",
-      "name": "comment.block.xslate",
-      "begin": "<:#",
+    "xslate-tag": {
+      "name": "meta.embedded.block.xslate",
+      "begin": "(<:)(-)?",
       "beginCaptures": {
-        "0": { "name": "punctuation.definition.comment.begin.xslate" }
+        "1": {
+          "name": "punctuation.section.embedded.begin.xslate"
+        },
+        "2": {
+          "name": "keyword.operator.chomp.xslate"
+        }
       },
-      "end": ":>",
+      "end": "(-)?(:>)",
       "endCaptures": {
-        "0": { "name": "punctuation.definition.comment.end.xslate" }
+        "1": {
+          "name": "keyword.operator.chomp.xslate"
+        },
+        "2": {
+          "name": "punctuation.section.embedded.end.xslate"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#xslate-expression"
+        }
+      ]
+    },
+    "xslate-line-directive": {
+      "name": "meta.line.directive.xslate",
+      "match": "^(\\s*)(:)\\s*(.*)$",
+      "captures": {
+        "2": {
+          "name": "punctuation.definition.directive.xslate"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#xslate-expression"
+            }
+          ]
+        }
       }
     },
-    "xslate-line-code": {
-      "comment": "Line-based template directives starting with : at beginning of line",
-      "name": "meta.line.xslate",
-      "begin": "^(\\s*)(:)(?!:)",
-      "beginCaptures": {
-        "2": { "name": "punctuation.definition.directive.xslate" }
-      },
-      "end": "$",
+    "xslate-expression": {
       "patterns": [
-        { "include": "#xslate-line-comment" },
-        { "include": "#xslate-expression-content" }
+        {
+          "include": "#xslate-comment"
+        },
+        {
+          "include": "#xslate-string"
+        },
+        {
+          "include": "#xslate-number"
+        },
+        {
+          "include": "#xslate-constant"
+        },
+        {
+          "include": "#xslate-keyword"
+        },
+        {
+          "include": "#xslate-operator"
+        },
+        {
+          "include": "#xslate-variable"
+        },
+        {
+          "include": "#xslate-function-call"
+        },
+        {
+          "include": "#xslate-method-call"
+        },
+        {
+          "include": "#xslate-filter"
+        },
+        {
+          "include": "#xslate-array"
+        },
+        {
+          "include": "#xslate-hash"
+        },
+        {
+          "include": "#xslate-parens"
+        }
       ]
     },
-    "xslate-raw-output": {
-      "comment": "Raw/unescaped output tags <:= expr :>",
-      "name": "meta.expression.raw.xslate",
-      "begin": "(<:)(=)",
-      "beginCaptures": {
-        "1": { "name": "punctuation.section.embedded.begin.xslate" },
-        "2": { "name": "keyword.operator.raw.xslate" }
-      },
-      "end": "(:>)",
-      "endCaptures": {
-        "1": { "name": "punctuation.section.embedded.end.xslate" }
-      },
-      "patterns": [
-        { "include": "#xslate-expression-content" }
-      ]
-    },
-    "xslate-tag": {
-      "comment": "Template tags <: ... :>",
-      "name": "meta.embedded.block.xslate",
-      "begin": "(<:)",
-      "beginCaptures": {
-        "1": { "name": "punctuation.section.embedded.begin.xslate" }
-      },
-      "end": "(:>)",
-      "endCaptures": {
-        "1": { "name": "punctuation.section.embedded.end.xslate" }
-      },
-      "patterns": [
-        { "include": "#xslate-expression-content" }
-      ]
-    },
-    "xslate-expression-content": {
-      "patterns": [
-        { "include": "#xslate-line-comment" },
-        { "include": "#xslate-block-comment" },
-        { "include": "#xslate-keywords" },
-        { "include": "#xslate-constants" },
-        { "include": "#xslate-string-double" },
-        { "include": "#xslate-string-single" },
-        { "include": "#xslate-number" },
-        { "include": "#xslate-variable" },
-        { "include": "#xslate-arrow" },
-        { "include": "#xslate-function" },
-        { "include": "#xslate-method" },
-        { "include": "#xslate-filter" },
-        { "include": "#xslate-operator" },
-        { "include": "#xslate-brackets" }
-      ]
-    },
-    "xslate-line-comment": {
-      "comment": "Line comment starting with #",
+    "xslate-comment": {
       "name": "comment.line.number-sign.xslate",
       "match": "#.*$"
     },
-    "xslate-block-comment": {
-      "comment": "Block comment #* ... *#",
-      "name": "comment.block.xslate",
-      "begin": "#\\*",
-      "beginCaptures": {
-        "0": { "name": "punctuation.definition.comment.begin.xslate" }
-      },
-      "end": "\\*#",
-      "endCaptures": {
-        "0": { "name": "punctuation.definition.comment.end.xslate" }
-      }
-    },
-    "xslate-keywords": {
+    "xslate-string": {
       "patterns": [
         {
-          "comment": "Control flow keywords",
-          "name": "keyword.control.xslate",
-          "match": "\\b(if|else|elsif|unless|for|foreach|while|loop|block|override|cascade|include|macro|end|given|when|default|with|around|before|after|super)\\b"
+          "name": "string.quoted.double.xslate",
+          "begin": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.xslate"
+            }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.xslate"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.xslate",
+              "match": "\\\\[\\\\\"nrtbf]"
+            },
+            {
+              "include": "#xslate-variable"
+            }
+          ]
         },
         {
-          "comment": "Logical operators as words",
-          "name": "keyword.operator.logical.xslate",
-          "match": "\\b(and|or|not|defined)\\b"
-        },
-        {
-          "comment": "Storage/declaration keywords",
-          "name": "storage.type.xslate",
-          "match": "\\b(my|constant)\\b"
-        }
-      ]
-    },
-    "xslate-constants": {
-      "patterns": [
-        {
-          "comment": "Boolean and nil constants",
-          "name": "constant.language.xslate",
-          "match": "\\b(true|false|nil|null)\\b"
-        }
-      ]
-    },
-    "xslate-string-double": {
-      "name": "string.quoted.double.xslate",
-      "begin": "\"",
-      "beginCaptures": {
-        "0": { "name": "punctuation.definition.string.begin.xslate" }
-      },
-      "end": "\"",
-      "endCaptures": {
-        "0": { "name": "punctuation.definition.string.end.xslate" }
-      },
-      "patterns": [
-        {
-          "name": "constant.character.escape.xslate",
-          "match": "\\\\(?:[\"\\\\nrtbf0]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})"
-        },
-        {
-          "name": "variable.other.interpolated.xslate",
-          "match": "\\$[a-zA-Z_][a-zA-Z0-9_]*(?:\\.[a-zA-Z_][a-zA-Z0-9_]*)*"
-        }
-      ]
-    },
-    "xslate-string-single": {
-      "name": "string.quoted.single.xslate",
-      "begin": "'",
-      "beginCaptures": {
-        "0": { "name": "punctuation.definition.string.begin.xslate" }
-      },
-      "end": "'",
-      "endCaptures": {
-        "0": { "name": "punctuation.definition.string.end.xslate" }
-      },
-      "patterns": [
-        {
-          "name": "constant.character.escape.xslate",
-          "match": "\\\\['\\\\_]"
+          "name": "string.quoted.single.xslate",
+          "begin": "'",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.xslate"
+            }
+          },
+          "end": "'",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.xslate"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.xslate",
+              "match": "\\\\[\\\\']"
+            }
+          ]
         }
       ]
     },
     "xslate-number": {
       "patterns": [
         {
-          "comment": "Hexadecimal numbers",
           "name": "constant.numeric.hex.xslate",
           "match": "\\b0[xX][0-9A-Fa-f]+\\b"
         },
         {
-          "comment": "Floating point numbers",
           "name": "constant.numeric.float.xslate",
           "match": "\\b\\d+\\.\\d+(?:[eE][+-]?\\d+)?\\b"
         },
         {
-          "comment": "Integer numbers",
           "name": "constant.numeric.integer.xslate",
           "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "xslate-constant": {
+      "patterns": [
+        {
+          "name": "constant.language.xslate",
+          "match": "\\b(nil|null|true|false)\\b"
+        },
+        {
+          "name": "constant.language.special.xslate",
+          "match": "\\b(__FILE__|__LINE__|__ROOT__)\\b"
+        }
+      ]
+    },
+    "xslate-keyword": {
+      "patterns": [
+        {
+          "name": "keyword.control.xslate",
+          "match": "\\b(if|elsif|else|unless|given|when|default|for|while|last|next|macro|block|include|cascade|with|around|before|after|super|override|constant)\\b"
+        },
+        {
+          "name": "storage.type.xslate",
+          "match": "\\b(my)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.word.xslate",
+          "match": "\\b(and|or|not|defined)\\b"
+        }
+      ]
+    },
+    "xslate-operator": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arrow.xslate",
+          "match": "->"
+        },
+        {
+          "name": "keyword.operator.assignment.xslate",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.comparison.xslate",
+          "match": "(==|!=|<=|>=|<|>|eq|ne|lt|le|gt|ge)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.xslate",
+          "match": "(\\+|-|\\*|/|%|\\*\\*)"
+        },
+        {
+          "name": "keyword.operator.string.xslate",
+          "match": "~"
+        },
+        {
+          "name": "keyword.operator.logical.xslate",
+          "match": "(&&|\\|\\||!)"
+        },
+        {
+          "name": "keyword.operator.ternary.xslate",
+          "match": "(\\?|:)"
+        },
+        {
+          "name": "keyword.operator.range.xslate",
+          "match": "\\.\\."
+        },
+        {
+          "name": "punctuation.separator.comma.xslate",
+          "match": ","
+        },
+        {
+          "name": "punctuation.separator.pair.xslate",
+          "match": "=>"
         }
       ]
     },
     "xslate-variable": {
       "patterns": [
         {
-          "comment": "Variable with property chain",
-          "name": "variable.other.xslate",
-          "match": "\\$[a-zA-Z_][a-zA-Z0-9_]*"
+          "name": "variable.other.special.xslate",
+          "match": "(\\$~)([a-zA-Z_][a-zA-Z0-9_]*)(?:\\.(index|count|is_first|is_last|size|body|cycle))?",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.variable.xslate"
+            },
+            "2": {
+              "name": "variable.other.loop.xslate"
+            },
+            "3": {
+              "name": "variable.other.property.xslate"
+            }
+          }
         },
         {
-          "comment": "Property/method access after dot",
+          "name": "variable.other.xslate",
+          "match": "(\\$)([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.variable.xslate"
+            },
+            "2": {
+              "name": "variable.other.readwrite.xslate"
+            }
+          }
+        },
+        {
           "name": "variable.other.property.xslate",
-          "match": "(?<=\\.)([a-zA-Z_][a-zA-Z0-9_]*)(?!\\s*\\()"
+          "match": "(?<=\\.)([a-zA-Z_][a-zA-Z0-9_]*)(?![\\s]*\\()"
         }
       ]
     },
-    "xslate-arrow": {
-      "comment": "Arrow operator for iterators: -> $item",
-      "match": "(->)\\s*(\\$[a-zA-Z_][a-zA-Z0-9_]*)?",
+    "xslate-function-call": {
+      "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()",
+      "name": "entity.name.function.xslate",
       "captures": {
-        "1": { "name": "punctuation.separator.arrow.xslate" },
-        "2": { "name": "variable.parameter.xslate" }
+        "1": {
+          "patterns": [
+            {
+              "name": "support.function.builtin.xslate",
+              "match": "\\b(mark_raw|html_escape|uri_escape|is_array_ref|is_hash_ref|dump|defined)\\b"
+            },
+            {
+              "name": "entity.name.function.xslate",
+              "match": ".*"
+            }
+          ]
+        }
       }
     },
-    "xslate-function": {
-      "comment": "Built-in and user functions",
-      "name": "entity.name.function.xslate",
-      "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()"
-    },
-    "xslate-method": {
-      "comment": "Method call after dot",
+    "xslate-method-call": {
       "match": "(?<=\\.)([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s*\\()",
       "captures": {
-        "1": { "name": "entity.name.function.method.xslate" }
+        "1": {
+          "patterns": [
+            {
+              "name": "support.function.method.array.xslate",
+              "match": "\\b(first|last|size|join|reverse|sort|map|reduce|merge)\\b"
+            },
+            {
+              "name": "support.function.method.hash.xslate",
+              "match": "\\b(keys|values|kv|size|merge)\\b"
+            },
+            {
+              "name": "entity.name.function.method.xslate",
+              "match": ".*"
+            }
+          ]
+        }
       }
     },
     "xslate-filter": {
-      "comment": "Pipe filters: | html, | uri, | mark_raw",
       "match": "(\\|)\\s*([a-zA-Z_][a-zA-Z0-9_]*)",
       "captures": {
-        "1": { "name": "keyword.operator.pipe.xslate" },
-        "2": { "name": "support.function.filter.xslate" }
+        "1": {
+          "name": "keyword.operator.pipe.xslate"
+        },
+        "2": {
+          "patterns": [
+            {
+              "name": "support.function.filter.xslate",
+              "match": "\\b(html|uri|mark_raw)\\b"
+            },
+            {
+              "name": "entity.name.function.filter.xslate",
+              "match": ".*"
+            }
+          ]
+        }
       }
     },
-    "xslate-operator": {
+    "xslate-array": {
+      "name": "meta.structure.array.xslate",
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.array.begin.xslate"
+        }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.array.end.xslate"
+        }
+      },
       "patterns": [
         {
-          "comment": "Comparison operators",
-          "name": "keyword.operator.comparison.xslate",
-          "match": "(==|!=|<=>|<=|>=|<|>|eq|ne|lt|gt|le|ge)(?=\\s)"
-        },
-        {
-          "comment": "Assignment operator",
-          "name": "keyword.operator.assignment.xslate",
-          "match": "="
-        },
-        {
-          "comment": "Arithmetic operators",
-          "name": "keyword.operator.arithmetic.xslate",
-          "match": "(\\+|-|\\*|/|%|\\*\\*)"
-        },
-        {
-          "comment": "String concatenation",
-          "name": "keyword.operator.string.xslate",
-          "match": "~"
-        },
-        {
-          "comment": "Logical operators",
-          "name": "keyword.operator.logical.xslate",
-          "match": "(&&|\\|\\||!|\\?\\?)"
-        },
-        {
-          "comment": "Ternary operator",
-          "name": "keyword.operator.ternary.xslate",
-          "match": "(\\?|:)(?=\\s)"
-        },
-        {
-          "comment": "Range operator",
-          "name": "keyword.operator.range.xslate",
-          "match": "\\.\\."
-        },
-        {
-          "comment": "Fat comma / pair operator",
-          "name": "punctuation.separator.pair.xslate",
-          "match": "=>"
+          "include": "#xslate-expression"
         }
       ]
     },
-    "xslate-brackets": {
+    "xslate-hash": {
+      "name": "meta.structure.hash.xslate",
+      "begin": "\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.hash.begin.xslate"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.hash.end.xslate"
+        }
+      },
       "patterns": [
         {
-          "comment": "Array literal brackets",
-          "begin": "\\[",
-          "beginCaptures": {
-            "0": { "name": "punctuation.section.array.begin.xslate" }
-          },
-          "end": "\\]",
-          "endCaptures": {
-            "0": { "name": "punctuation.section.array.end.xslate" }
-          },
-          "patterns": [
-            { "include": "#xslate-expression-content" }
-          ]
-        },
+          "include": "#xslate-expression"
+        }
+      ]
+    },
+    "xslate-parens": {
+      "begin": "\\(",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.parens.begin.xslate"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.parens.end.xslate"
+        }
+      },
+      "patterns": [
         {
-          "comment": "Hash literal braces",
-          "begin": "\\{",
-          "beginCaptures": {
-            "0": { "name": "punctuation.section.hash.begin.xslate" }
-          },
-          "end": "\\}",
-          "endCaptures": {
-            "0": { "name": "punctuation.section.hash.end.xslate" }
-          },
-          "patterns": [
-            { "include": "#xslate-expression-content" }
-          ]
-        },
-        {
-          "comment": "Parentheses",
-          "begin": "\\(",
-          "beginCaptures": {
-            "0": { "name": "punctuation.section.parens.begin.xslate" }
-          },
-          "end": "\\)",
-          "endCaptures": {
-            "0": { "name": "punctuation.section.parens.end.xslate" }
-          },
-          "patterns": [
-            { "include": "#xslate-expression-content" }
-          ]
+          "include": "#xslate-expression"
         }
       ]
     }

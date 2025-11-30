@@ -11,6 +11,7 @@
 
     <h1><: $greeting :>, <: $user.name | html :>!</h1>
 
+    : # Conditional statements
     <: if $user.is_admin { :>
         <div class="admin-panel">
             <p>Welcome, administrator!</p>
@@ -23,12 +24,23 @@
         <p>Please <a href="/login">log in</a>.</p>
     <: } :>
 
-    <: # Loop example :>
+    : # Line-based conditionals
+    : if $user.logged_in {
+        <p>Welcome back, <: $user.name | html :>!</p>
+        <p>Your last visit was <: $user.last_visit :></p>
+    : } else {
+        <p>Please log in to continue.</p>
+    : }
+
+    <: # Loop examples :>
     <ul>
     : for $items -> $item {
         <li>
             <strong><: $item.name | html :></strong>
             <span class="price">$<: $item.price :></span>
+            : if $item.on_sale {
+                <span class="sale">On Sale!</span>
+            : }
         </li>
     : }
     </ul>
@@ -41,16 +53,34 @@
     <: # Filters and method calls :>
     <p>Total: <: $cart.total() | number_format(2) :></p>
     <p>URL: <: $page.url | uri :></p>
+    <p><: $description | html :></p>
 
     <: # Variables and operators :>
     : my $count = $items.size()
     : my $has_items = $count > 0
     : my $message = $has_items ? "You have " ~ $count ~ " items" : "Cart is empty"
     <p><: $message :></p>
+    <p>Total items: <: $count :></p>
 
     <: # Hash and array literals :>
-    : my $config = { debug => true, max_items => 100 }
+    : my $config = { debug => true, max_items => 100, version => "1.0" }
     : my $colors = ["red", "green", "blue"]
+
+    <: # Array and hash methods :>
+    <p>First color: <: $colors.first() :></p>
+    <p>Config keys: <: $config.keys().join(", ") :></p>
+
+    <: # Special variables :>
+    <p>File: <: __FILE__ :></p>
+    <p>Line: <: __LINE__ :></p>
+
+    <: # Macro example :>
+    : macro render_user -> $user {
+        <div class="user">
+            <h3><: $user.name :></h3>
+            <p><: $user.email :></p>
+        </div>
+    : }
 
     <: # Include and cascade :>
     <: include "partials/footer.tx" :>
