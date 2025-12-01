@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.2] - 2025-12-01
+
+### Changed
+- Updated description, we only support Kolon
+
+### Added
+- Complete CHANGELOG.md with detailed version history
+
 ## [0.9.1] - 2025-11-30
 
 ### Changed
